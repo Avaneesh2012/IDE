@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FuturIDE - Download</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Fira Sans', 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #23243a 0%, #2e2f4f 100%);
+            color: #f2f2f2;
+        }
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 60vh;
+            text-align: center;
+            background: linear-gradient(135deg, #2e2f4f 60%, #23243a 100%);
+            border-bottom-left-radius: 60px 40px;
+            border-bottom-right-radius: 60px 40px;
+            box-shadow: 0 8px 32px #0008;
+            opacity: 0;
+            animation: fadeIn 1.2s ease 0.1s forwards;
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        .hero-title {
+            font-size: 3em;
+            font-weight: 700;
+            margin-bottom: 0.3em;
+            letter-spacing: 2px;
+        }
+        .hero-desc {
+            font-size: 1.3em;
+            margin-bottom: 2em;
+            color: #bfc6e0;
+        }
+        .download-btns {
+            display: flex;
+            gap: 2em;
+            margin-bottom: 2em;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .download-btn {
+            background: linear-gradient(135deg, #4f8cff 0%, #6a5cff 100%);
+            color: #fff;
+            border: none;
+            border-radius: 2em;
+            padding: 1em 2.5em;
+            font-size: 1.2em;
+            font-weight: 600;
+            box-shadow: 0 4px 24px #4f8cff44;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+            outline: none;
+            font-family: 'Fira Sans', 'Segoe UI', Arial, sans-serif;
+            position: relative;
+        }
+        .download-btn:hover, .download-btn:focus {
+            background: linear-gradient(135deg, #6a5cff 0%, #4f8cff 100%);
+            transform: translateY(-2px) scale(1.04);
+            box-shadow: 0 8px 32px #4f8cff66;
+        }
+        .download-btn:active {
+            transform: scale(0.98);
+            box-shadow: 0 2px 8px #4f8cff33;
+        }
+        .features-section {
+            margin: 4em auto 2em auto;
+            max-width: 1100px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2em;
+            justify-content: center;
+        }
+        .feature-card {
+            background: linear-gradient(135deg, #23243a 60%, #2e2f4f 100%);
+            border-radius: 2em;
+            box-shadow: 0 2px 16px #0004;
+            padding: 2em 2em 1.5em 2em;
+            min-width: 260px;
+            max-width: 320px;
+            flex: 1 1 260px;
+            text-align: center;
+            color: #e0e6ff;
+            font-family: 'Fira Sans', 'Segoe UI', Arial, sans-serif;
+        }
+        .feature-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 0.7em;
+        }
+        .feature-desc {
+            font-size: 1em;
+            color: #bfc6e0;
+        }
+        .footer {
+            text-align: center;
+            color: #bfc6e0;
+            margin: 3em 0 1em 0;
+            font-size: 1em;
+            padding-bottom: 1em;
+        }
+        .footer-links {
+            margin-top: 0.5em;
+        }
+        .footer-links a {
+            color: #6a5cff;
+            text-decoration: none;
+            margin: 0 1em;
+            font-weight: 600;
+            font-size: 1.05em;
+            transition: color 0.2s, text-shadow 0.2s;
+        }
+        .footer-links a:hover, .footer-links a:focus {
+            color: #4f8cff;
+            text-shadow: 0 2px 8px #4f8cff44;
+        }
+        @media (max-width: 900px) {
+            .features-section {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        @media (max-width: 600px) {
+            .hero-title {
+                font-size: 2em;
+            }
+            .features-section {
+                margin: 2em 0 1em 0;
+            }
+            .feature-card {
+                min-width: 90vw;
+                max-width: 98vw;
+                padding: 1.2em 0.5em 1em 0.5em;
+            }
+            .download-btns {
+                gap: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <div class="hero-title">FuturIDE</div>
+        <div class="hero-desc">A futuristic, cross-platform IDE for C, Python, and HTML.<br>Modern, rounded, and AI-powered.</div>
+        <div class="download-btns">
+            <a href="/download/windows" class="download-btn">Download for Windows</a>
+            <!-- <a href="/download/mac" class="download-btn">Download for Mac</a> -->
+            <span style="color:#bfc6e0; font-size:1.1em; margin-left:1em;">Mac version coming soon</span>
+        </div>
+        <div>
+            <a href="/ide" style="color:#bfc6e0;text-decoration:underline;font-size:1.1em;transition:color 0.2s;" onmouseover="this.style.color='#4f8cff'" onmouseout="this.style.color='#bfc6e0'">Try FuturIDE in your browser</a>
+        </div>
+    </div>
+    <div class="features-section">
+        <div class="feature-card">
+            <div class="feature-title">Multi-language Support</div>
+            <div class="feature-desc">Edit and run C, Python, and HTML code in one place. Switch languages with a click.</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-title">AI Assistant</div>
+            <div class="feature-desc">Get code suggestions, explanations, and error help from a built-in AI assistant.</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-title">Modern, Rounded UI</div>
+            <div class="feature-desc">Enjoy a beautiful, futuristic interface with rounded corners and smooth gradients.</div>
+        </div>
+        <div class="feature-card">
+            <div class="feature-title">Cross-Platform</div>
+            <div class="feature-desc">Available for Windows and Mac. Use it online or download for your desktop.</div>
+        </div>
+    </div>
+    <div class="footer">
+        &copy; 2024 FuturIDE. All rights reserved.
+        <div class="footer-links">
+            <a href="https://github.com/yourusername/futuride" target="_blank">GitHub</a>
+            <a href="mailto:contact@futuride.com">Contact</a>
+            <a href="#" onclick="alert('Privacy policy coming soon!');return false;">Privacy</a>
+        </div>
+    </div>
+</body>
+</html> 

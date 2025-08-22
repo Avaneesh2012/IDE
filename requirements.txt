@@ -1,0 +1,6 @@
+Flask>=2.3.0
+Werkzeug>=2.3.0
+pathlib2>=2.3.0; python_version < "3.4"
+typing-extensions>=4.0.0; python_version < "3.8"
+pytest>=7.0.0
+pytest-flask>=1.2.0

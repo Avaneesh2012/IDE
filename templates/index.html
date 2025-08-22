@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Minimal Web IDE</title>
+    <style>
+        :root {
+            --bg: #f4f6fa;
+            --text: #222;
+            --main-bg: #fff;
+            --editor-bg: #f9f9f9;
+            --editor-border: #bbb;
+            --output-bg: #222;
+            --output-text: #eee;
+            --error-bg: #ffeded;
+            --error-text: #b00;
+            --error-border: #fbb;
+            --preview-bg: #fff;
+            --preview-border: #ccc;
+            --sidebar-bg: #fff;
+            --sidebar-border: #e0e0e0;
+        }
+        .dark-theme {
+            --bg: #181c20;
+            --text: #e0e0e0;
+            --main-bg: #23272e;
+            --editor-bg: #23272e;
+            --editor-border: #444;
+            --output-bg: #181c20;
+            --output-text: #e0e0e0;
+            --error-bg: #2d1a1a;
+            --error-text: #ff6b6b;
+            --error-border: #b00;
+            --preview-bg: #23272e;
+            --preview-border: #444;
+            --sidebar-bg: #23272e;
+            --sidebar-border: #444;
+        }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+        }
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        .main {
+            flex: 2;
+            padding: 2em 3em 2em 2em;
+            background: var(--main-bg);
+        }
+        .sidebar {
+            flex: 1;
+            background: var(--sidebar-bg);
+            border-left: 1px solid var(--sidebar-border);
+            padding: 2em 1.5em;
+            min-width: 300px;
+            box-shadow: -2px 0 8px var(--sidebar-border);
+        }
+        h1 {
+            font-size: 2em;
+            margin-bottom: 0.5em;
+        }
+        label {
+            font-weight: 500;
+        }
+        select, button {
+            font-size: 1em;
+            padding: 0.3em 0.7em;
+            margin-left: 0.5em;
+        }
+        .editor {
+            width: 100%;
+            height: 320px;
+            font-family: 'Fira Mono', 'Consolas', monospace;
+            font-size: 1.1em;
+            margin-top: 1em;
+            margin-bottom: 1em;
+            border: 1px solid var(--editor-border);
+            border-radius: 4px;
+            background: var(--editor-bg);
+            padding: 1em;
+            resize: vertical;
+            color: var(--text);
+        }
+        .output, .error {
+            background: var(--output-bg);
+            color: var(--output-text);
+            padding: 1em;
+            min-height: 80px;
+            margin-top: 1em;
+            border-radius: 4px;
+            white-space: pre-wrap;
+        }
+        .error {
+            background: var(--error-bg);
+            color: var(--error-text);
+            border: 1px solid var(--error-border);
+        }
+        .preview {
+            background: var(--preview-bg);
+            border: 1px solid var(--preview-border);
+            margin-top: 1em;
+            min-height: 120px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .form-row {
+            margin-bottom: 1em;
+        }
+        .ai-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 1em;
+        }
+        .ai-placeholder {
+            color: #888;
+            font-style: italic;
+            margin-top: 2em;
+        }
+        .theme-switcher {
+            margin-bottom: 2em;
+        }
+        .file-controls {
+            display: flex;
+            gap: 1em;
+            align-items: center;
+            margin-bottom: 1.5em;
+        }
+        .file-controls form {
+            display: inline;
+        }
+        .flash-messages {
+            margin-bottom: 1em;
+        }
+        .flash-message {
+            padding: 0.8em 1em;
+            margin-bottom: 0.5em;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideIn 0.3s ease;
+        }
+        .flash-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .flash-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .flash-close {
+            background: none;
+            border: none;
+            font-size: 1.2em;
+            cursor: pointer;
+            color: inherit;
+            opacity: 0.7;
+        }
+        .flash-close:hover {
+            opacity: 1;
+        }
+        .template-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.3em 0.7em;
+            cursor: pointer;
+            margin-left: 0.5em;
+        }
+        .template-btn:hover {
+            background: #5a6268;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="{% if theme == 'dark' %}dark-theme{% endif %}">
+<div class="container">
+    <div class="main">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-message flash-{{ category }}">
+                            {{ message }}
+                            <button class="flash-close" onclick="this.parentElement.remove()">&times;</button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        <div class="file-controls">
+            <form method="post" action="/ide" enctype="multipart/form-data">
+                <input type="file" name="file" accept=".py,.c,.html,.txt,.js,.css">
+                <input type="hidden" name="file_action" value="upload">
+                <button type="submit">Upload</button>
+            </form>
+            <form method="post" action="/ide">
+                <input type="hidden" name="file_action" value="new">
+                <button type="submit">New File</button>
+            </form>
+            <form method="post" action="/ide" id="download-form">
+                <input type="hidden" name="file_action" value="download">
+                <input type="hidden" name="code" id="download_code_hidden">
+                <button type="submit">Download</button>
+            </form>
+        </div>
+        <div class="theme-switcher">
+            <form method="post" action="/ide" style="display:inline;">
+                <label for="theme">Theme:</label>
+                <select name="theme" id="theme" onchange="this.form.submit()">
+                    <option value="light" {% if theme != 'dark' %}selected{% endif %}>Light</option>
+                    <option value="dark" {% if theme == 'dark' %}selected{% endif %}>Dark</option>
+                </select>
+                <input type="hidden" name="theme_only" value="1">
+            </form>
+        </div>
+        <h1>Minimal Web IDE</h1>
+        <form method="post" action="/ide">
+            <div class="form-row">
+                <label for="language">Language:</label>
+                <select name="language" id="language">
+                    {% for lang_code, lang_info in languages.items() %}
+                        <option value="{{ lang_code }}" {% if language == lang_code %}selected{% endif %}>
+                            {{ lang_info.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <button type="button" onclick="loadTemplate()" class="template-btn">Load Template</button>
+            </div>
+            <div class="form-row">
+                <label for="code">Your Code:</label><br>
+                <textarea name="code" id="code" class="editor" placeholder="Write your code here...">{{ code|default('') }}</textarea>
+            </div>
+            <button type="submit">Run</button>
+        </form>
+        {% if output %}
+            <div class="output">
+                <strong>Output:</strong><br>
+                {{ output|safe }}
+            </div>
+        {% endif %}
+        {% if error %}
+            <div class="error">
+                <strong>Error:</strong><br>
+                {{ error|safe }}
+            </div>
+        {% endif %}
+        {% if html_preview %}
+            <div class="preview">
+                <iframe srcdoc="{{ html_preview|e }}" style="width:100%;height:200px;border:none;"></iframe>
+            </div>
+        {% endif %}
+    </div>
+    <div class="sidebar">
+        <div class="ai-title">AI Assistant</div>
+        <div class="ai-placeholder">
+            (AI help coming soon! Here you’ll get code suggestions, explanations, and error help.)
+        </div>
+    </div>
+</div>
+
+<script>
+    // Language templates
+    const templates = {
+        'python': 'print("Hello, World!")',
+        'c': '#include <stdio.h>\n\nint main() {\n    printf("Hello, World!\\n");\n    return 0;\n}',
+        'html': '<!DOCTYPE html>\n<html>\n<head>\n    <title>Hello World</title>\n</head>\n<body>\n    <h1>Hello, World!</h1>\n</body>\n</html>',
+        'javascript': 'console.log("Hello, World!");'
+    };
+
+    function loadTemplate() {
+        const language = document.getElementById('language').value;
+        const codeArea = document.getElementById('code');
+        if (templates[language]) {
+            codeArea.value = templates[language];
+        }
+    }
+
+    // Update download form with current code
+    document.getElementById('download-form').addEventListener('submit', function() {
+        document.getElementById('download_code_hidden').value = document.getElementById('code').value;
+    });
+
+    // Auto-save code to session storage
+    document.getElementById('code').addEventListener('input', function() {
+        sessionStorage.setItem('futuride_code', this.value);
+    });
+
+    // Load code from session storage on page load
+    window.addEventListener('load', function() {
+        const savedCode = sessionStorage.getItem('futuride_code');
+        if (savedCode && !document.getElementById('code').value) {
+            document.getElementById('code').value = savedCode;
+        }
+    });
+</script>
+</body>
+</html>

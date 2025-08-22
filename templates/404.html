@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found | FuturIDE</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #23243a 0%, #2e2f4f 100%);
+            color: #f2f2f2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .error-container {
+            text-align: center;
+            padding: 2em;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        .error-code {
+            font-size: 6em;
+            font-weight: bold;
+            margin: 0;
+            background: linear-gradient(135deg, #4f8cff, #6a5cff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .error-message {
+            font-size: 1.5em;
+            margin: 1em 0;
+            color: #bfc6e0;
+        }
+        .home-link {
+            display: inline-block;
+            margin-top: 2em;
+            padding: 1em 2em;
+            background: linear-gradient(135deg, #4f8cff, #6a5cff);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .home-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 140, 255, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h1 class="error-code">404</h1>
+        <p class="error-message">Oops! The page you're looking for doesn't exist.</p>
+        <a href="/" class="home-link">Go Home</a>
+    </div>
+</body>
+</html> 
